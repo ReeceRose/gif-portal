@@ -33,7 +33,7 @@ describe("solana", () => {
     // Assert gifCount to be 0
   });
 
-  it("Can update gif count", async () => {
+  it("Inserts expected GIF", async () => {
     const program = anchor.workspace.Solana;
     const baseAccount = anchor.web3.Keypair.generate();
 
@@ -46,13 +46,16 @@ describe("solana", () => {
     );
     // assert 0
     console.log("GIF Count", account.totalGifs.toString());
-    await program.rpc.addGif({
+    await program.rpc.addGif("gif_link", {
       accounts: {
         baseAccount: baseAccount.publicKey,
+        user: provider.wallet.publicKey,
       },
     });
     account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     // assert 1
     console.log("GIF Count", account.totalGifs.toString());
+    console.log("GIF Link", account.gifList[0].gifLink);
+    // assert gif_link is = gif_link
   });
 });
