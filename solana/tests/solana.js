@@ -58,4 +58,33 @@ describe("solana", () => {
     console.log("GIF Link", account.gifList[0].gifLink);
     // assert gif_link is = gif_link
   });
+
+  it("Can upvote GIF", async () => {
+    const program = anchor.workspace.Solana;
+    const baseAccount = anchor.web3.Keypair.generate();
+
+    const tx = await initializeBaseAccount(program, baseAccount);
+
+    console.log("Your transaction signature", tx);
+
+    let account = await program.account.baseAccount.fetch(
+      baseAccount.publicKey
+    );
+    // assert 0
+    console.log("GIF Count", account.totalGifs.toString());
+    await program.rpc.addGif("gif_link", {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+        user: provider.wallet.publicKey,
+      },
+    });
+    await program.rpc.upvoteGif("gif_link", provider.wallet.publicKey, {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+      },
+    });
+    account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    console.log(account);
+    // assert upvote is 1
+  });
 });

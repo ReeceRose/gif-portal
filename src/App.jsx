@@ -107,7 +107,21 @@ const App = () => {
   };
 
   const upvoteGif = async (gif) => {
-    console.log("Coming soon!");
+    console.log(gif);
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programID, provider);
+
+      await program.rpc.upvoteGif(gif.gifLink, gif.userAddress, {
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+        },
+      });
+      console.log("GIF succesfully upvoted!");
+      await fetchGifs(); // Might be better to directly update state, but this will 'auto refresh' the feed
+    } catch (e) {
+      console.log("Error upvoting GIF:", e);
+    }
   };
 
   const getProvider = () => {
@@ -212,7 +226,7 @@ const App = () => {
                   >
                     Upvote
                   </button>
-                  <p className="upvote-count">0</p>
+                  <p className="upvote-count">{gif.gifUpvotes.toString()}</p>
                 </div>
               </div>
             ))}
