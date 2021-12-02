@@ -77,6 +77,7 @@ const App = () => {
         );
         console.log("Got the account", account);
         console.log(account.gifList);
+        console.log(account.gifList[0].userAddress.toString());
         setGifList(account.gifList);
       } catch (e) {
         console.log("Error getting GIF list", e);
@@ -190,6 +191,18 @@ const App = () => {
             {gifList.map((gif, index) => (
               <div className="gif-item" key={index}>
                 <img src={gif.gifLink} alt={gif.gifLink} />
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={
+                    "https://explorer.solana.com/address/" +
+                    gif.userAddress.toString() +
+                    "?cluster=devnet"
+                  }
+                  className="gif-user"
+                >
+                  User: {gif.userAddress.toString()}
+                </a>
               </div>
             ))}
           </div>

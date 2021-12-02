@@ -111,6 +111,15 @@
   object-fit: cover;
 }
 
+.gif-user,
+.gif-user:hover,
+.gif-user:visited {
+  text-decoration: none;
+  color: #fff;
+  padding-top: 0.25rem;
+  font-size: 1.25rem;
+}
+
 .connected-container input[type="text"] {
   display: inline-block;
   color: white;
