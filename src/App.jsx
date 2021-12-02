@@ -7,10 +7,13 @@ import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import { Program, Provider, web3 } from "@project-serum/anchor";
 
 import idl from "./idl.json";
+import kp from "./keypair.json";
 
-const { SystemProgram, Keypair } = web3;
+const { SystemProgram } = web3;
 
-let baseAccount = Keypair.generate();
+const arr = Object.values(kp._keypair.secretKey);
+const secret = new Uint8Array(arr);
+const baseAccount = web3.Keypair.fromSecretKey(secret);
 
 const programID = new PublicKey(idl.metadata.address);
 
@@ -73,6 +76,7 @@ const App = () => {
           baseAccount.publicKey
         );
         console.log("Got the account", account);
+        console.log(account.gifList);
         setGifList(account.gifList);
       } catch (e) {
         console.log("Error getting GIF list", e);
@@ -119,8 +123,26 @@ const App = () => {
   };
 
   const sendGif = async () => {
-    if (inputValue.length > 0) {
-      console.log("Gif link:", inputValue);
+    if (inputValue.length === 0) {
+      console.log("No link");
+      return;
+    }
+    setInputValue("");
+    console.log("Gif link:", inputValue);
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programID, provider);
+
+      await program.rpc.addGif(inputValue, {
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+        },
+      });
+      console.log("GIF succesfully sent to program!");
+      await fetchGifs();
+    } catch (e) {
+      console.log("Error sending GIF:", e);
     }
   };
 
@@ -165,9 +187,9 @@ const App = () => {
             </button>
           </form>
           <div className="gif-grid">
-            {gifList.map((gif) => (
-              <div className="gif-item" key={gif}>
-                <img src={gif} alt={gif} />
+            {gifList.map((gif, index) => (
+              <div className="gif-item" key={index}>
+                <img src={gif.gifLink} alt={gif.gifLink} />
               </div>
             ))}
           </div>
@@ -182,7 +204,7 @@ const App = () => {
     };
     window.addEventListener("load", onLoad);
     return () => window.removeEventListener("load", onLoad);
-  }, []);
+  });
 
   useEffect(() => {
     fetchGifs();
