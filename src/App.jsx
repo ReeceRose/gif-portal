@@ -76,6 +76,7 @@ const App = () => {
           baseAccount.publicKey
         );
         console.log("Got the account", account);
+        account.gifList.sort((gif1, gif2) => gif1.gifUpvotes - gif2.gifUpvotes);
         setGifList(account.gifList);
       } catch (e) {
         console.log("Error getting GIF list", e);
@@ -256,18 +257,22 @@ const App = () => {
           <p className="sub-text">
             View your GIF collection in the metaverse ✨
           </p>
-          {!walletAddress && renderNotConnectedContainer()}
-          {walletAddress && renderConnectedContainer()}
+          <div className="personal-info">
+            <img
+              alt="Twitter Logo"
+              className="twitter-logo"
+              src={twitterLogo}
+            />
+            <a
+              className="personal-info-text"
+              href={TWITTER_LINK}
+              target="_blank"
+              rel="noreferrer"
+            >{`built by @${TWITTER_HANDLE}`}</a>
+          </div>
         </div>
-        <div className="footer-container">
-          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
-          <a
-            className="footer-text"
-            href={TWITTER_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >{`built by @${TWITTER_HANDLE}`}</a>
-        </div>
+        {!walletAddress && renderNotConnectedContainer()}
+        {walletAddress && renderConnectedContainer()}
       </div>
     </div>
   );
