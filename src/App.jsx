@@ -76,8 +76,6 @@ const App = () => {
           baseAccount.publicKey
         );
         console.log("Got the account", account);
-        console.log(account.gifList);
-        console.log(account.gifList[0].userAddress.toString());
         setGifList(account.gifList);
       } catch (e) {
         console.log("Error getting GIF list", e);
@@ -106,6 +104,10 @@ const App = () => {
     } catch (error) {
       console.log("Error creating BaseAccount account:", error);
     }
+  };
+
+  const upvoteGif = async (gif) => {
+    console.log("Coming soon!");
   };
 
   const getProvider = () => {
@@ -203,6 +205,15 @@ const App = () => {
                 >
                   User: {gif.userAddress.toString()}
                 </a>
+                <div className="upvote-container">
+                  <button
+                    className="upvote"
+                    onClick={async () => await upvoteGif(gif)}
+                  >
+                    Upvote
+                  </button>
+                  <p className="upvote-count">0</p>
+                </div>
               </div>
             ))}
           </div>

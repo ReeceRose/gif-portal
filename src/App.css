@@ -120,6 +120,27 @@
   font-size: 1.25rem;
 }
 
+.upvote-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upvote-count {
+  color: #60c657;
+  font-size: 1.25rem;
+}
+
+.upvote {
+  background-color: #35aee2;
+  color: #fff;
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 0.25rem;
+  margin: 1rem;
+  cursor: pointer;
+}
+
 .connected-container input[type="text"] {
   display: inline-block;
   color: white;
